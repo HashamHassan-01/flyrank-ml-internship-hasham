@@ -141,7 +141,7 @@ This work does not claim a sealed blind evaluation. The target is a constructed 
 
 ## 9. Acknowledgments & data credit
 
-Built on the FlyRank ML Internship dataset.
+Built on the [FlyRank ML Internship dataset](https://flyrank.ai).
 
 > **Claims checklist before submitting:** observed / measured / directional / decision-support
 > **Metrics vs. base rate:** report your task's base rate (majority-class %) next to any
