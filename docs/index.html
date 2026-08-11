@@ -1,1 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Content Refresh Prioritization — ML Capstone</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f5f7fa;
+      color: #1f2937;
+      line-height: 1.7;
+    }
+
+    .hero {
+      background: #111827;
+      color: white;
+      padding: 70px 20px;
+    }
+
+    .hero-inner {
+      max-width: 1050px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #d1d5db;
+      max-width: 850px;
+    }
+
+    .container {
+      max-width: 1050px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    section {
+      background: white;
+      padding: 32px;
+      margin-bottom: 28px;
+      border-radius: 12px;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 28px;
+      color: #111827;
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      color: #374151;
+      margin-top: 28px;
+    }
+
+    .highlight {
+      background: #f3f4f6;
+      border-left: 5px solid #374151;
+      padding: 18px 20px;
+      margin: 20px 0;
+      border-radius: 6px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 16px;
+      margin: 25px 0;
+    }
+
+    .metric {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 27px;
+      color: #111827;
+      margin-bottom: 5px;
+    }
+
+    .metric span {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #e5e7eb;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 700;
+    }
+
+    code {
+      background: #f3f4f6;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+
+    ul, ol {
+      padding-left: 25px;
+    }
+
+    .recommendation {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 18px 0;
+      background: #fafafa;
+    }
+
+    .recommendation h3 {
+      margin-top: 0;
+    }
+
+    .formula {
+      background: #111827;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    .warning {
+      background: #fff7ed;
+      border-left: 5px solid #f97316;
+      padding: 18px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .success {
+      background: #f0fdf4;
+      border-left: 5px solid #22c55e;
+      padding: 18px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    footer {
+      background: #111827;
+      color: #d1d5db;
+      padding: 40px 20px;
+      margin-top: 50px;
+    }
+
+    footer .footer-inner {
+      max-width: 1050px;
+      margin: auto;
+    }
+
+    footer a {
+      color: white;
+    }
+
+    .small {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      section {
+        padding: 22px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-inner">
+      <p>ML CAPSTONE — CONTENT PRIORITIZATION</p>
+
+      <h1>
+        Content Refresh Prioritization Using Observable Search Signals
+      </h1>
+
+      <p>
+        A reproducible decision-support workflow for ranking content pages
+        for human refresh review using search volume, content age,
+        average search position, and click-through rate.
+      </p>
+
+      <p class="small">
+        Anonymized FlyRank internship dataset · 30,000 pages ·
+        Client-grouped validation
+      </p>
+    </div>
+  </header>
+
+
+  <main class="container">
+
+
+    <!-- 1 ABSTRACT -->
+    <section id="abstract">
+      <h2>1. Abstract</h2>
+
+      <p>
+        Content teams cannot manually inspect every page with the same level
+        of attention. This project investigates whether observable content
+        and search-performance signals can help prioritize pages for
+        content-refresh review.
+      </p>
+
+      <p>
+        The workflow uses an anonymized dataset containing 30,000 content
+        pages and 44 fields. Four observable signals are used for modeling:
+        search volume, content age, average search position, and click-through
+        rate (CTR).
+      </p>
+
+      <p>
+        A transparent Opportunity Score was constructed using fixed weights
+        for these signals. A Random Forest Regressor was then evaluated using
+        a client-grouped train/test split so that pages belonging to the same
+        client could not appear in both training and testing data.
+      </p>
+
+      <p>
+        The Random Forest achieved an MAE of 0.002149, RMSE of 0.006581,
+        and R² of 0.987601 on the grouped test set. However, the Opportunity
+        Score itself is calculated from the same four features used by the
+        model. Therefore, these results demonstrate that the model can
+        reproduce the constructed scoring rule rather than proving that it
+        predicts an independent business outcome.
+      </p>
+
+      <div class="highlight">
+        <strong>Key conclusion:</strong>
+        The workflow is best treated as a decision-support system that creates
+        a ranked human-review queue. Independent post-refresh outcome data
+        would be required to determine whether the recommendations lead to
+        real-world SEO improvement.
+      </div>
+    </section>
+
+
+    <!-- 2 QUESTION -->
+    <section id="question">
+      <h2>2. Question</h2>
+
+      <h3>Research Question</h3>
+
+      <p>
+        <strong>
+          Which observable content and search signals can help prioritize
+          pages for content-refresh review?
+        </strong>
+      </p>
+
+      <h3>Problem Statement</h3>
+
+      <p>
+        Content teams need a practical way to decide which pages deserve
+        attention first. Reviewing every page equally is inefficient, so the
+        goal of this project is to create a reproducible workflow that ranks
+        pages according to observable signals.
+      </p>
+
+      <p>
+        The workflow focuses on search demand, content age, average search
+        position, and CTR. It is designed to support human review rather than
+        automatically decide which pages should be refreshed.
+      </p>
+
+      <div class="highlight">
+        <strong>Decision-support goal:</strong>
+        Rank pages for human review and explain why a page receives a higher
+        priority.
+      </div>
+
+      <p>
+        The project does not attempt to prove that refreshing a page causes
+        improved SEO performance.
+      </p>
+    </section>
+
+
+    <!-- 3 DATA -->
+    <section id="data">
+      <h2>3. Data</h2>
+
+      <p>
+        The analysis uses the anonymized FlyRank content-refresh dataset
+        provided for the internship.
+      </p>
+
+      <div class="metric-grid">
+        <div class="metric">
+          <strong>30,000</strong>
+          <span>Content pages</span>
+        </div>
+
+        <div class="metric">
+          <strong>44</strong>
+          <span>Total fields</span>
+        </div>
+
+        <div class="metric">
+          <strong>32</strong>
+          <span>Unique clients</span>
+        </div>
+
+        <div class="metric">
+          <strong>4</strong>
+          <span>Model features</span>
+        </div>
+      </div>
+
+      <h3>Core Fields</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td><code>content_id</code></td>
+            <td>Anonymized page identifier</td>
+          </tr>
+
+          <tr>
+            <td><code>client_id</code></td>
+            <td>Anonymized client grouping variable</td>
+          </tr>
+
+          <tr>
+            <td><code>search_volume</code></td>
+            <td>Observed search-demand signal</td>
+          </tr>
+
+          <tr>
+            <td><code>content_age_days</code></td>
+            <td>Age of the content in days</td>
+          </tr>
+
+          <tr>
+            <td><code>avg_position</code></td>
+            <td>Observed average search position</td>
+          </tr>
+
+          <tr>
+            <td><code>ctr</code></td>
+            <td>Observed click-through rate</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Data Quality</h3>
+
+      <p>
+        The original dataset contains missing search-volume values.
+        <code>avg_position = 0</code> is treated as missing position data
+        according to the project data contract.
+      </p>
+
+      <p>
+        After removing rows with missing modeling features and records with
+        no valid average-position value, 27,076 rows remained for the
+        modeling workflow.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Original rows</td>
+            <td>30,000</td>
+          </tr>
+
+          <tr>
+            <td>Original columns</td>
+            <td>44</td>
+          </tr>
+
+          <tr>
+            <td>Rows used for modeling</td>
+            <td>27,076</td>
+          </tr>
+
+          <tr>
+            <td>Clients represented in modeling data</td>
+            <td>31</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="small">
+        No client names, private URLs, or private search queries are used
+        in this analysis.
+      </p>
+    </section>
+
+
+    <!-- 4 METHODOLOGY -->
+    <section id="methodology">
+      <h2>4. Methodology</h2>
+
+      <h3>Feature Set</h3>
+
+      <p>
+        The model uses four observable features:
+      </p>
+
+      <ul>
+        <li><code>search_volume</code></li>
+        <li><code>content_age_days</code></li>
+        <li><code>avg_position</code></li>
+        <li><code>ctr</code></li>
+      </ul>
+
+      <h3>Opportunity Score</h3>
+
+      <p>
+        A rule-based Opportunity Score was created using normalized versions
+        of the four signals.
+      </p>
+
+      <div class="formula">
+volume_score = search_volume / max(search_volume)
+
+age_score = content_age_days / max(content_age_days)
+
+rank_score = avg_position / max(avg_position)
+
+ctr_score = 1 - (ctr / max(ctr))
+
+Opportunity Score =
+0.40 × volume_score
++ 0.25 × rank_score
++ 0.20 × age_score
++ 0.15 × ctr_score
+      </div>
+
+      <p>
+        The weighting gives the largest contribution to search volume,
+        followed by average position, content age, and CTR.
+      </p>
+
+      <h3>Model</h3>
+
+      <p>
+        A Random Forest Regressor was selected to reproduce the Opportunity
+        Score from the same four input signals.
+      </p>
+
+      <p>
+        The model used 100 trees with a fixed random state of 42.
+      </p>
+
+      <h3>Grouped Validation</h3>
+
+      <p>
+        A GroupShuffleSplit was used with <code>client_id</code> as the
+        grouping variable. This prevents pages from the same client from
+        appearing in both the training and test sets.
+      </p>
+
+      <div class="success">
+        <strong>Validation check:</strong>
+        21,741 rows were used for training and 5,335 rows were used for
+        testing. The training set contained 24 clients and the test set
+        contained 7 clients, with zero client overlap.
+      </div>
+
+      <h3>Leakage / Target Definition Check</h3>
+
+      <p>
+        The most important methodological limitation is that the target is
+        constructed directly from the same four features used by the model.
+        This means the machine-learning task is primarily a reproduction
+        task rather than prediction of an independently measured outcome.
+      </p>
+    </section>
+
+
+    <!-- 5 RESULTS -->
+    <section id="results">
+      <h2>5. Results</h2>
+
+      <h3>Grouped Test Performance</h3>
+
+      <div class="metric-grid">
+        <div class="metric">
+          <strong>0.002149</strong>
+          <span>Random Forest MAE</span>
+        </div>
+
+        <div class="metric">
+          <strong>0.006581</strong>
+          <span>Random Forest RMSE</span>
+        </div>
+
+        <div class="metric">
+          <strong>0.987601</strong>
+          <span>Random Forest R²</span>
+        </div>
+      </div>
+
+      <h3>Model vs Mean Baseline</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>MAE</th>
+            <th>RMSE</th>
+            <th>R²</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Random Forest</td>
+            <td>0.002149</td>
+            <td>0.006581</td>
+            <td>0.987601</td>
+          </tr>
+
+          <tr>
+            <td>Mean Baseline</td>
+            <td>0.052463</td>
+            <td>0.059494</td>
+            <td>-0.013312</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        The Random Forest substantially reduced prediction error compared
+        with the mean baseline on the same client-grouped test set.
+      </p>
+
+      <div class="warning">
+        <strong>Important interpretation:</strong>
+        The strong R² does not demonstrate that the model predicts future
+        SEO performance. The target was calculated from the same features
+        provided to the model, so strong reproduction of that target is
+        expected.
+      </div>
+
+      <h3>Signal Findings</h3>
+
+      <p>
+        The signal audit produced several directional findings that can be
+        used to support the review workflow.
+      </p>
+
+      <ul>
+        <li>
+          The oldest 25% of pages had a median CTR of
+          <strong>0.05</strong>, compared with <strong>0.08</strong> for
+          the remaining pages. The measured difference was
+          <strong>-0.03</strong>.
+        </li>
+
+        <li>
+          After excluding <code>avg_position = 0</code> records,
+          CTR and average position showed a negative Spearman relationship
+          of <strong>rho = -0.2342</strong>.
+        </li>
+
+        <li>
+          Search volume had a weak negative association with CTR,
+          with <strong>Spearman rho = -0.0756</strong>. This signal was
+          therefore treated as mixed rather than as a standalone rule.
+        </li>
+      </ul>
+
+      <p>
+        These findings are directional associations and should not be
+        interpreted as causal effects.
+      </p>
+    </section>
+
+
+    <!-- 6 LIMITATIONS -->
+    <section id="limitations">
+      <h2>6. Limitations</h2>
+
+      <p>
+        The analysis has several important limitations that affect how the
+        results should be interpreted.
+      </p>
+
+      <ol>
+        <li>
+          <strong>Constructed target:</strong>
+          The Opportunity Score is derived from the same four features used
+          by the Random Forest.
+        </li>
+
+        <li>
+          <strong>No causal claim:</strong>
+          Observational relationships do not establish that refreshing a
+          page will cause better search performance.
+        </li>
+
+        <li>
+          <strong>Missing position data:</strong>
+          <code>avg_position = 0</code> represents missing position data and
+          was excluded from the modeling workflow.
+        </li>
+
+        <li>
+          <strong>Missing values:</strong>
+          Rows with missing required modeling features were excluded.
+        </li>
+
+        <li>
+          <strong>Decision support only:</strong>
+          The model should not automatically approve or reject content
+          refreshes.
+        </li>
+
+        <li>
+          <strong>Independent validation required:</strong>
+          Post-refresh performance outcomes are needed to determine whether
+          the prioritization approach produces real-world improvement.
+        </li>
+      </ol>
+
+      <div class="highlight">
+        The correct interpretation is therefore:
+        <strong>
+          this workflow helps organize human review; it does not guarantee
+          SEO improvement.
+        </strong>
+      </div>
+    </section>
+
+
+    <!-- 7 RECOMMENDATIONS -->
+    <section id="recommendations">
+      <h2>7. Ranked Recommendations</h2>
+
+      <p>
+        The recommendations below convert the observed signals into a
+        practical content-review workflow.
+      </p>
+
+      <div class="recommendation">
+        <h3>1. Prioritize older pages with lower CTR</h3>
+
+        <p>
+          <strong>Evidence:</strong>
+          The oldest 25% of pages had a median CTR of 0.05 compared with
+          0.08 for the remaining pages.
+        </p>
+
+        <p>
+          <strong>Action:</strong>
+          Review older pages with weaker observed CTR first. Check whether
+          the content is outdated, mismatched to search intent, or otherwise
+          in need of improvement.
+        </p>
+      </div>
+
+      <div class="recommendation">
+        <h3>2. Give additional attention to lower-CTR pages with weaker search position</h3>
+
+        <p>
+          <strong>Evidence:</strong>
+          CTR and average position showed a negative Spearman relationship
+          of rho = -0.2342 after excluding records without valid position
+          data.
+        </p>
+
+        <p>
+          <strong>Action:</strong>
+          Use lower CTR together with weaker search position as a combined
+          review signal rather than relying on either metric alone.
+        </p>
+      </div>
+
+      <div class="recommendation">
+        <h3>3. Treat search volume as a secondary signal</h3>
+
+        <p>
+          <strong>Evidence:</strong>
+          Search volume had only a weak negative association with CTR,
+          with Spearman rho = -0.0756.
+        </p>
+
+        <p>
+          <strong>Action:</strong>
+          Do not automatically prioritize a page only because it has high
+          search volume. Use search volume alongside other signals and
+          human review.
+        </p>
+      </div>
+
+      <h3>Human-Review Rule</h3>
+
+      <div class="highlight">
+        Every recommendation should be treated as a review prompt rather
+        than an automatic decision. A content reviewer should inspect the
+        page, search context, content quality, and business relevance before
+        approving a refresh.
+      </div>
+    </section>
+
+
+    <!-- 8 COMMUNICATION / CONCLUSION -->
+    <section id="communication">
+      <h2>8. Conclusion & Communication</h2>
+
+      <h3>Conclusion</h3>
+
+      <p>
+        This project developed a reproducible workflow for prioritizing
+        content pages for human refresh review. It combines four observable
+        signals into a transparent Opportunity Score and evaluates a
+        Random Forest under client-grouped validation.
+      </p>
+
+      <p>
+        The model reproduced the constructed score closely, but the analysis
+        deliberately avoids treating this as evidence of guaranteed SEO
+        improvement.
+      </p>
+
+      <p>
+        The most useful practical output is therefore a ranked review queue
+        supported by observable evidence and explicit limitations.
+      </p>
+
+      <h3>5-Minute Demo Outline</h3>
+
+      <ol>
+        <li>
+          <strong>Problem:</strong>
+          Content teams need to decide which pages deserve attention first.
+        </li>
+
+        <li>
+          <strong>Data:</strong>
+          30,000 anonymized content pages and four primary modeling signals.
+        </li>
+
+        <li>
+          <strong>Method:</strong>
+          A transparent Opportunity Score plus Random Forest evaluation using
+          client-grouped validation.
+        </li>
+
+        <li>
+          <strong>Results:</strong>
+          MAE 0.002149, RMSE 0.006581, and R² 0.987601 on the grouped test set.
+        </li>
+
+        <li>
+          <strong>Interpretation:</strong>
+          The model reproduces the constructed score but does not establish
+          an independent business outcome.
+        </li>
+
+        <li>
+          <strong>Recommendation:</strong>
+          Use the output as a human-review queue and validate it against
+          future post-refresh outcomes.
+        </li>
+      </ol>
+
+      <h3>Social-Post Cut</h3>
+
+      <div class="highlight">
+        I built a content-refresh prioritization workflow using an anonymized
+        FlyRank dataset of 30,000 pages.
+        <br><br>
+        The workflow combines search volume, content age, average search
+        position, and CTR into an Opportunity Score, then evaluates a
+        Random Forest model using client-grouped validation.
+        <br><br>
+        The model reproduced the constructed score closely, but the key
+        lesson is about honest ML framing: because the target is derived
+        from the same input signals, the result does not prove that
+        refreshing a page will improve SEO performance.
+        <br><br>
+        The final output is therefore a decision-support queue for human
+        review, with ranked recommendations based on observed and
+        directional evidence.
+      </div>
+
+      <h3>Employer-Facing Summary</h3>
+
+      <p>
+        I developed a reproducible machine-learning workflow for prioritizing
+        content pages for human refresh review. Using 30,000 anonymized pages,
+        I combined search volume, content age, average search position, and
+        CTR into a transparent Opportunity Score and evaluated a Random
+        Forest using client-grouped validation with zero client overlap.
+        The model achieved an MAE of 0.002149 and R² of 0.987601 against the
+        constructed scoring target, while the analysis explicitly identified
+        the target-definition limitation and avoided claiming causal SEO
+        improvement. The final workflow produces ranked review
+        recommendations and is designed as decision support rather than
+        automatic content decisions.
+      </p>
+    </section>
+
+
+    <!-- 9 ACKNOWLEDGMENTS -->
+    <section id="acknowledgments">
+      <h2>9. Acknowledgments & Data Credit</h2>
+
+      <p>
+        This project was completed as part of the FlyRank ML internship
+        workflow using the anonymized content-refresh dataset provided for
+        the internship.
+      </p>
+
+      <p>
+        The analysis is intended for educational and decision-support
+        purposes. The dataset and project materials are handled in
+        accordance with the provided internship guidance and avoid exposing
+        private client information, private URLs, or private search queries.
+      </p>
+
+      <p>
+        Data and internship credit:
+        <a href="https://flyrank.ai" target="_blank" rel="noopener">
+          FlyRank
+        </a>
+      </p>
+
+      <p>
+        Supporting artifacts include the capstone notebook, signal audit,
+        action playbook, and source repository containing the reproducible
+        analysis workflow.
+      </p>
+
+      <div class="success">
+        <strong>Final takeaway:</strong>
+        The workflow is a transparent prioritization system for human review.
+        Its next important validation step is testing whether the ranked
+        recommendations are associated with measurable improvement after
+        real content refreshes.
+      </div>
+    </section>
+
+  </main>
+
+
+  <footer>
+    <div class="footer-inner">
+      <h3>Content Refresh Prioritization — ML Capstone</h3>
+
+      <p>
+        Reproducible machine-learning decision-support workflow using
+        anonymized content and search signals.
+      </p>
+
+      <p>
+        Dataset credit:
+        <a href="https://flyrank.ai" target="_blank" rel="noopener">
+          FlyRank
+        </a>
+      </p>
+
+      <p class="small">
+        This paper presents observational analysis and constructed-score
+        modeling. It does not establish causal SEO effects or guarantee
+        performance improvement.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
