@@ -28,15 +28,19 @@ Machine learning is useful here because it can combine multiple page-level signa
 
 ## 2. Data safety
 
-The analysis used the anonymized content-refresh dataset containing 30,000 rows and 44 columns. The required modeling fields were `content_id`, `client_id`, `search_volume`, `content_age_days`, `avg_position`, and `ctr`.
+The analysis used the anonymized FlyRank content-refresh starter release containing 30,000 content pages and 44 columns. The unit of analysis is one content page.
 
-For modeling, rows missing required numeric inputs were excluded. This left 27,076 rows for modeling, with 31 unique clients; 2,924 rows were removed during preparation.
+The modeling workflow used the page-level fields `content_id`, `client_id`, `search_volume`, `content_age_days`, `avg_position`, and `ctr`. The four predictive signals were `search_volume`, `content_age_days`, `avg_position`, and `ctr`.
 
-The analysis deliberately excluded `content_id` and `client_id` from the model features. `client_id` was used only to create a grouped train/test split so that pages from the same client could not appear in both sets. This produced 24 training clients and 7 test clients with zero client overlap.
+For the capstone modeling workflow, rows missing required numeric inputs were excluded. This left 27,076 rows for modeling, with 31 unique clients; 2,924 rows were removed during preparation.
 
-Potential label-derived fields such as `trend_direction` and `trend_pct` were not used as model features because they could introduce leakage. The model used only the selected page-level signals: `search_volume`, `content_age_days`, `avg_position`, and `ctr`.
+The dataset also contains fields with explicit 90-day, last-30-day, and previous-30-day windows. These additional performance-window fields were not included in the final four-feature model. The analysis kept the feature set focused on `search_volume`, `content_age_days`, `avg_position`, and `ctr` to match the defined Opportunity Score and avoid adding additional temporal or downstream-performance representations to the scoring workflow.
 
-The dataset and analysis are anonymized. No client names, private URLs, or private search queries are included in the report or public-facing artifacts.
+`content_id` and `client_id` were deliberately excluded from the model features. `content_id` is an identifier rather than a generalizable page signal. `client_id` was used only for grouped validation so that pages from the same client could not appear in both the training and test sets. This produced 24 training clients and 7 test clients with zero client overlap.
+
+Potential leakage or label-related fields such as `trend_direction` and `trend_pct` were not used as model features. Additional derived tiers and downstream performance-window fields were also excluded from the final feature set.
+
+The dataset and analysis are anonymized. No client names, domains, private URLs, private search queries, credentials, or raw private exports are included in the report or public-facing artifacts.
 
 ## 3. Baseline
 
@@ -121,23 +125,26 @@ Confidence is directional rather than predictive. The evidence supports prioriti
 
 ## 8. Reproducibility
 
-The analysis is contained in the notebooks committed under `work/notebooks/` in the project repository.
+The analysis workflow is contained in the notebooks committed under `work/notebooks/` in the project repository.
 
-The main capstone notebook is:
+The main modeling and capstone workflow includes:
 
-`work/notebooks/capstone.ipynb`
+- `work/notebooks/w05_model.ipynb` — Opportunity Score construction and Random Forest modeling.
+- `work/notebooks/w06_validation_audit.ipynb` — client-grouped validation and research-claim audit.
+- `work/notebooks/w07_action_playbook.ipynb` — ranked actions, reason codes, and decision-support workflow.
+- `work/notebooks/w03_feature_leakage_check.ipynb` — feature selection, leakage checks, and privacy review.
 
-The signal-audit analysis is:
+The source repository is:
 
-`work/notebooks/w04_signal_audit.ipynb`
+https://github.com/HashamHassan-01/flyrank-ml-internship-hasham
 
-The project can be inspected or rerun from the repository after cloning it and opening the notebooks in Google Colab or a compatible Jupyter environment.
+The workflow can be inspected and rerun using Google Colab or a compatible Jupyter environment.
 
-The modeling workflow uses `random_state=42` for the Random Forest and the grouped train/test split. The evaluation uses a client-level split with zero client overlap between training and test sets.
+The Random Forest uses `random_state=42`, and evaluation uses a client-grouped train/test split designed to prevent client overlap between training and test data.
 
-The modeling dataset and evaluation outputs are generated from the anonymized starter dataset available in the repository. The analysis does not use client names, private queries, or private URLs.
+The modeling and evaluation workflow uses the anonymized FlyRank ML Internship dataset. Public artifacts do not include client names, private queries, private URLs, credentials, or raw private exports.
 
-This work does not claim a sealed blind evaluation. The target is a constructed Opportunity Score proxy, so the results should be treated as reproducible analysis of that scoring rule rather than independent validation of real-world refresh outcomes.
+This work does not claim a sealed blind evaluation. The target is a constructed Opportunity Score proxy derived from the same four input signals used by the model. Therefore, the results should be interpreted as reproducible analysis and reproduction of the scoring rule rather than independent validation of real-world content-refresh outcomes.
 
 ## 9. Acknowledgments & data credit
 
