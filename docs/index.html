@@ -191,6 +191,88 @@
       font-size: 14px;
     }
 
+    .chart-card {
+      margin: 24px 0;
+      padding: 22px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #fafafa;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: 150px 1fr 110px;
+      gap: 14px;
+      align-items: center;
+      margin: 14px 0;
+    }
+
+    .bar-track {
+      height: 28px;
+      background: #e5e7eb;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      background: #374151;
+      border-radius: 6px;
+      min-width: 4px;
+    }
+
+    .bar.baseline {
+      background: #9ca3af;
+    }
+
+    .legend {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 10px;
+    }
+
+    .legend span::before {
+      content: "";
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-right: 6px;
+      border-radius: 2px;
+      background: #374151;
+    }
+
+    .legend .baseline-label::before {
+      background: #9ca3af;
+    }
+
+    .repro-links {
+      display: grid;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .repro-link {
+      display: block;
+      padding: 16px 18px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #fafafa;
+      color: #1f2937;
+      text-decoration: none;
+    }
+
+    .repro-link:hover {
+      background: #f3f4f6;
+    }
+
+    .repro-link strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
     @media (max-width: 700px) {
       .hero h1 {
         font-size: 32px;
@@ -585,6 +667,49 @@ Opportunity Score =
         with the mean baseline on the same client-grouped test set.
       </p>
 
+      <div class="chart-card">
+        <h3>Visual Comparison: Lower Error Is Better</h3>
+        <p class="small">
+          Bar lengths are scaled within each metric so that the model and
+          baseline can be compared visually on the same grouped test split.
+        </p>
+
+        <div class="legend">
+          <span>Random Forest</span>
+          <span class="baseline-label">Mean Baseline</span>
+        </div>
+
+        <h4>MAE</h4>
+        <div class="chart-row">
+          <strong>Random Forest</strong>
+          <div class="bar-track"><div class="bar" style="width: 4.1%;"></div></div>
+          <span>0.002149</span>
+        </div>
+        <div class="chart-row">
+          <strong>Mean Baseline</strong>
+          <div class="bar-track"><div class="bar baseline" style="width: 100%;"></div></div>
+          <span>0.052463</span>
+        </div>
+
+        <h4>RMSE</h4>
+        <div class="chart-row">
+          <strong>Random Forest</strong>
+          <div class="bar-track"><div class="bar" style="width: 11.1%;"></div></div>
+          <span>0.006581</span>
+        </div>
+        <div class="chart-row">
+          <strong>Mean Baseline</strong>
+          <div class="bar-track"><div class="bar baseline" style="width: 100%;"></div></div>
+          <span>0.059494</span>
+        </div>
+
+        <p class="small">
+          The R² comparison remains in the table above because the mean
+          baseline is negative (-0.013312), while the Random Forest reaches
+          0.987601.
+        </p>
+      </div>
+
       <div class="warning">
         <strong>Important interpretation:</strong>
         The strong R² does not demonstrate that the model predicts future
@@ -755,102 +880,62 @@ Opportunity Score =
     </section>
 
 
-    <!-- 8 COMMUNICATION / CONCLUSION -->
-    <section id="communication">
-      <h2>8. Conclusion & Communication</h2>
-
-      <h3>Conclusion</h3>
+    <!-- 8 REPRODUCIBILITY -->
+    <section id="reproducibility">
+      <h2>8. Reproducibility</h2>
 
       <p>
-        This project developed a reproducible workflow for prioritizing
-        content pages for human refresh review. It combines four observable
-        signals into a transparent Opportunity Score and evaluates a
-        Random Forest under client-grouped validation.
+        The analysis is designed to be inspectable through the source
+        repository, executed notebooks, outputs, and this deployed paper.
+        The links below point to the public project artifacts.
       </p>
 
-      <p>
-        The model reproduced the constructed score closely, but the analysis
-        deliberately avoids treating this as evidence of guaranteed SEO
-        improvement.
-      </p>
+      <div class="repro-links">
+        <a class="repro-link"
+           href="https://github.com/HashamHassan-01/flyrank-ml-internship-hasham"
+           target="_blank" rel="noopener">
+          <strong>Source Repository</strong>
+          Full project workspace, notebooks, supporting files, outputs, and paper source.
+        </a>
 
-      <p>
-        The most useful practical output is therefore a ranked review queue
-        supported by observable evidence and explicit limitations.
-      </p>
+        <a class="repro-link"
+           href="https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w05_model.ipynb"
+           target="_blank" rel="noopener">
+          <strong>Capstone Modeling Notebook</strong>
+          Opportunity Score construction and Random Forest modeling.
+        </a>
 
-      <h3>5-Minute Demo Outline</h3>
+        <a class="repro-link"
+           href="https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w06_validation_audit.ipynb"
+           target="_blank" rel="noopener">
+          <strong>Validation and Research Claim Audit</strong>
+          Client-grouped validation and the honest target/leakage framing.
+        </a>
 
-      <ol>
-        <li>
-          <strong>Problem:</strong>
-          Content teams need to decide which pages deserve attention first.
-        </li>
-
-        <li>
-          <strong>Data:</strong>
-          30,000 anonymized content pages and four primary modeling signals.
-        </li>
-
-        <li>
-          <strong>Method:</strong>
-          A transparent Opportunity Score plus Random Forest evaluation using
-          client-grouped validation.
-        </li>
-
-        <li>
-          <strong>Results:</strong>
-          MAE 0.002149, RMSE 0.006581, and R² 0.987601 on the grouped test set.
-        </li>
-
-        <li>
-          <strong>Interpretation:</strong>
-          The model reproduces the constructed score but does not establish
-          an independent business outcome.
-        </li>
-
-        <li>
-          <strong>Recommendation:</strong>
-          Use the output as a human-review queue and validate it against
-          future post-refresh outcomes.
-        </li>
-      </ol>
-
-      <h3>Social-Post Cut</h3>
-
-      <div class="highlight">
-        I built a content-refresh prioritization workflow using an anonymized
-        FlyRank dataset of 30,000 pages.
-        <br><br>
-        The workflow combines search volume, content age, average search
-        position, and CTR into an Opportunity Score, then evaluates a
-        Random Forest model using client-grouped validation.
-        <br><br>
-        The model reproduced the constructed score closely, but the key
-        lesson is about honest ML framing: because the target is derived
-        from the same input signals, the result does not prove that
-        refreshing a page will improve SEO performance.
-        <br><br>
-        The final output is therefore a decision-support queue for human
-        review, with ranked recommendations based on observed and
-        directional evidence.
+        <a class="repro-link"
+           href="https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w07_action_playbook.ipynb"
+           target="_blank" rel="noopener">
+          <strong>Content Action Playbook</strong>
+          Ranked review actions, reason codes, and decision-support guidance.
+        </a>
       </div>
 
-      <h3>Employer-Facing Summary</h3>
+      <h3>Reproduction Outline</h3>
+      <ol>
+        <li>Review the data contract and preprocessing decisions.</li>
+        <li>Build the four observable signals and construct the Opportunity Score.</li>
+        <li>Evaluate the Random Forest against the mean baseline using the same client-grouped split.</li>
+        <li>Review the leakage limitation: the target is constructed from the same four input signals.</li>
+        <li>Use the action playbook to convert observed signals into a ranked human-review queue.</li>
+      </ol>
 
-      <p>
-        I developed a reproducible machine-learning workflow for prioritizing
-        content pages for human refresh review. Using 30,000 anonymized pages,
-        I combined search volume, content age, average search position, and
-        CTR into a transparent Opportunity Score and evaluated a Random
-        Forest using client-grouped validation with zero client overlap.
-        The model achieved an MAE of 0.002149 and R² of 0.987601 against the
-        constructed scoring target, while the analysis explicitly identified
-        the target-definition limitation and avoided claiming causal SEO
-        improvement. The final workflow produces ranked review
-        recommendations and is designed as decision support rather than
-        automatic content decisions.
-      </p>
+      <div class="highlight">
+        <strong>Reproducibility note:</strong>
+        The project is reproducible as an analysis workflow. Its current
+        limitation is not reproducibility but outcome validation: independent
+        post-refresh performance data would still be required to test whether
+        the ranked recommendations are associated with real-world improvement.
+      </div>
     </section>
 
 
@@ -879,7 +964,7 @@ Opportunity Score =
       </p>
 
       <p>
-        Supporting artifacts include the capstone notebook, signal audit,
+        Supporting artifacts include the capstone notebook, validation audit,
         action playbook, and source repository containing the reproducible
         analysis workflow.
       </p>
