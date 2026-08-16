@@ -125,26 +125,32 @@ Confidence is directional rather than predictive. The evidence supports prioriti
 
 ## 8. Reproducibility
 
-The analysis workflow is contained in the notebooks committed under `work/notebooks/` in the project repository.
+The capstone workflow and supporting assignments are contained in the `work/notebooks/` directory of the public project repository.
 
-The main modeling and capstone workflow includes:
+The main capstone notebook is:
 
-- `work/notebooks/w05_model.ipynb` — Opportunity Score construction and Random Forest modeling.
-- `work/notebooks/w06_validation_audit.ipynb` — client-grouped validation and research-claim audit.
-- `work/notebooks/w07_action_playbook.ipynb` — ranked actions, reason codes, and decision-support workflow.
-- `work/notebooks/w03_feature_leakage_check.ipynb` — feature selection, leakage checks, and privacy review.
+[Capstone Notebook](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/capstone.ipynb)
 
-The source repository is:
+The supporting notebooks include:
 
-https://github.com/HashamHassan-01/flyrank-ml-internship-hasham
+- [Feature Vector and Leakage Check](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w03_feature_leakage_check.ipynb)
+- [Signal Audit](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w04_signal_audit.ipynb)
+- [Baseline Score](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w04_baseline_score.ipynb)
+- [Modeling](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w05_model.ipynb)
+- [Validation and Research Claim Audit](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w06_validation_audit.ipynb)
+- [Content Action Playbook](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham/blob/main/work/notebooks/w07_action_playbook.ipynb)
 
-The workflow can be inspected and rerun using Google Colab or a compatible Jupyter environment.
+The full project repository is:
 
-The Random Forest uses `random_state=42`, and evaluation uses a client-grouped train/test split designed to prevent client overlap between training and test data.
+[Hasham Hassan — FlyRank ML Internship Repository](https://github.com/HashamHassan-01/flyrank-ml-internship-hasham)
 
-The modeling and evaluation workflow uses the anonymized FlyRank ML Internship dataset. Public artifacts do not include client names, private queries, private URLs, credentials, or raw private exports.
+The workflow can be inspected and rerun in Google Colab or a compatible Jupyter environment. The Random Forest uses `random_state=42`, and evaluation uses a client-grouped train/test split with zero client overlap between training and test data.
 
-This work does not claim a sealed blind evaluation. The target is a constructed Opportunity Score proxy derived from the same four input signals used by the model. Therefore, the results should be interpreted as reproducible analysis and reproduction of the scoring rule rather than independent validation of real-world content-refresh outcomes.
+The modeling dataset and evaluation workflow are based on the anonymized FlyRank ML Internship dataset. Public project artifacts do not include client names, domains, private queries, private URLs, credentials, or raw private exports.
+
+This work does not claim a sealed blind evaluation. The target is a constructed Opportunity Score proxy derived from the same four input signals used by the model. Therefore, the results should be interpreted as reproducible analysis of the scoring rule rather than independent validation of real-world content-refresh outcomes.
+
+The main limitation is outcome validation: an independent post-refresh outcome would be required to test whether pages prioritized by this workflow are associated with measurable future improvement.
 
 ## 9. Acknowledgments & data credit
 
